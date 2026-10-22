@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Shorts Factory</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #101322;
+      color: white;
+      padding: 24px 14px;
+    }
+    .container {
+      max-width: 760px;
+      margin: auto;
+    }
+    header { text-align: center; margin-bottom: 28px; }
+    .logo { font-size: 42px; }
+    h1 { margin: 10px 0; color: #a5b4fc; }
+    .subtitle { color: #c4c7d5; line-height: 1.6; }
+    .panel {
+      background: #1c2135;
+      border: 1px solid #353b56;
+      padding: 20px;
+      border-radius: 16px;
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      margin: 15px 0 8px;
+      font-weight: bold;
+    }
+    textarea, select {
+      width: 100%;
+      padding: 13px;
+      border-radius: 9px;
+      border: 1px solid #4b5270;
+      background: #111629;
+      color: white;
+      font-size: 16px;
+    }
+    textarea { min-height: 110px; resize: vertical; }
+    button {
+      cursor: pointer;
+      border: 0;
+      border-radius: 9px;
+      padding: 13px 17px;
+      font-size: 15px;
+      font-weight: bold;
+    }
+    .generate {
+      margin-top: 20px;
+      width: 100%;
+      background: #818cf8;
+      color: #101322;
+    }
+    .secondary {
+      background: #353b56;
+      color: white;
+      margin-top: 10px;
+    }
+    .result { white-space: pre-wrap; line-height: 1.65; overflow-wrap: anywhere; }
+    .hint { color: #c4c7d5; font-size: 13px; line-height: 1.6; }
+    footer { text-align: center; color: #aeb4ca; font-size: 13px; padding: 16px; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header>
+      <div class="logo">🎬 🤖</div>
+      <h1>AI Shorts Factory</h1>
+      <p class="subtitle">Turn your ideas into YouTube Shorts prompts.</p>
+    </header>
+
+    <section class="panel">
+      <h2>Create your video plan</h2>
+
+      <label for="idea">Your video idea</label>
+      <textarea id="idea" placeholder="Example: A giant samosa starts talking to a hungry man..."></textarea>
+
+      <label for="duration">Video length</label>
+      <select id="duration">
+        <option value="10">10 seconds</option>
+        <option value="20" selected>20 seconds</option>
+        <option value="30">30 seconds</option>
+      </select>
+
+      <label for="style">Video style</label>
+      <select id="style">
+        <option value="Funny comedy">Funny comedy</option>
+        <option value="Surprising action">Surprising action</option>
+        <option value="Emotional story">Emotional story</option>
+      </select>
+
+      <button class="generate" onclick="generatePlan()">Generate video prompts ✨</button>
+      <p class="hint">First version: creates a ready-to-copy prompt plan in your browser. AI API integration can be added later.</p>
+    </section>
+
+    <section class="panel" id="outputPanel" hidden>
+      <h2>Your video plan</h2>
+      <div id="output" class="result"></div>
+      <button class="secondary" onclick="copyPlan()">Copy all prompts</button>
+    </section>
+
+    <footer>AI Shorts Factory · Made for creators</footer>
+  </main>
+
+  <script>
+    function generatePlan() {
+      const idea = document.getElementById("idea").value.trim();
+      const duration = Number(document.getElementById("duration").value);
+      const style = document.getElementById("style").value;
+
+      if (!idea) {
+        alert("Please enter your video idea first.");
+        return;
+      }
+
+      const count = duration / 10;
+      let plan = "VIDEO IDEA\n" + idea +
+        "\n\nSTYLE: " + style +
+        "\nFORMAT: Vertical 9:16, YouTube Shorts" +
+        "\nTOTAL LENGTH: " + duration + " seconds" +
+        "\nLOOK: Realistic human characters and realistic environment." +
+        "\nKeep character appearance, clothes and voice consistent across every scene.\n";
+
+      for (let i = 1; i <= count; i++) {
+        plan += "\nSCENE " + i + " — 10 SECONDS\n" +
+          "Create a realistic, funny " + style.toLowerCase() +
+          " video based on this idea: " + idea + ". " +
+          "This is scene " + i + " of " + count +
+          ". Show clear actions, natural dialogue, expressive reactions, " +
+          "realistic lighting and a believable environment. " +
+          "Vertical 9:16 composition. Keep the same character design and voice " +
+          "as the other scenes. Make the scene flow naturally and end with " +
+          "a clear moment that leads into the next scene.\n";
+      }
+
+      plan += "\nYOUTUBE TITLE\nCreate one short, catchy title for this video.\n" +
+        "\nDESCRIPTION\nWrite a short description for YouTube Shorts.\n" +
+        "\nHASHTAGS\n#Shorts #AIVideo #Comedy";
+
+      document.getElementById("output").textContent = plan;
+      document.getElementById("outputPanel").hidden = false;
+      document.getElementById("outputPanel").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function copyPlan() {
+      const text = document.getElementById("output").textContent;
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text)
+          .then(() => alert("Prompts copied!"))
+          .catch(() => alert("Please select and copy the prompts manually."));
+      } else {
+        alert("Please select and copy the prompts manually.");
+      }
+    }
+  </script>
+</body>
+</html>
